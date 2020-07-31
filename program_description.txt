@@ -1,0 +1,6 @@
+// event loop for game to run in
+// user starts game by selecting play
+// game displays a sequence, with brief intervals between each item in the sequence
+// after the sequence finishes, display a countdown of 3, 2, 1, then the player has to input the sequence correctly within 10 seconds
+// if they input it wrong, they lose and the game goes back to the loading screen
+// if they do it correctly, it says good work, then replays the pattern with an additional x characters
