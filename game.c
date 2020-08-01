@@ -10,12 +10,12 @@
  * FIXED 1) sleep_delay = char_count / 10 is producing zero
  * FIXED 2) Usleep might be better as it does microseconds. Need to then convert everything to microseconds to use it.
  * FIXED 3) Make division by 10 a double and cast character_count as a double
- * 4) functionize some of the code. Rule of thumb is you should be able to describe its function within 1 sentence. Main should really only be calling other functions.
+ * ASK ABOUT THIS 4) functionize some of the code. Rule of thumb is you should be able to describe its function within 1 sentence. Main should really only be calling other functions.
  * Functionizing can make it easier to debug as its easier to find when something isn't going right.
  * 5) use the 'man' function in linux for checking stuff (including stuff in c). e.g. man ls or something like that. May need to use man1, man2, etc. to get the right command.
  * 6) keep track of how long buffers are?
  * 7) shouldn't ever really include c files. You should use an h.file instead. h files are the same as c files, but conventionally we only include h.files.
- * FIXED 8) printf tries to managge the wy you interact with teh kernel to minimize the syscall. So instead of sending things piece by piece it buffers it up and sends it all at once. This is creating issues.
+ * FIXED 8) printf tries to manage the way you interact with thh kernel to minimize the syscalls. So instead of sending things piece by piece it buffers it up and sends it all at once. This is creating issues.
  * Using fflush here can help. Look at the example people sent.
  * 9) Writing empty loops to clear the buffer is not the best way. But it's fine here.
  * 10) Keep an eye on indentation. Reasonable.
