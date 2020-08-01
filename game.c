@@ -27,14 +27,14 @@ int main(int argc, char *argv[])
     char input[] = "play";
     int c;
     int seed_time;
-    char begin[] = " ";
+    char rules = 'x'; /* not certain why I had difficulties using fgets with a char here - fgets subtracts 1 from array length */
 
     /* game variables */
     int level = 1;
     int flag = 1;
     char letters[100];
     char guess[100];
-    int char_count = 2 * level + 2;
+    int char_count = 4;
     double sleep_delay = 1000000;
     int score = 0;
 
@@ -54,15 +54,29 @@ int main(int argc, char *argv[])
         /* This is the core part of the game */
         if(str_compare(sizeof(input), input, "play"))
         {
-            puts("The rules of Clefairy Says are simple. Over a 10 second interval a number of letters will appear on the screen separated by spaces. Once the pattern is finished, the screen will be wiped and the player will have to input the pattern from memory. If correct, they gain points equal to their current level then move up a level. Each successive level will increase in difficulty by repeating the pattern with an increasing number of characters.");
-           
-	    /* having some trouble making this work - not sure what I need to do here but getting double spacing on input */
-	    puts("Press enter to begin!");
-	    fgets(begin, sizeof(begin), stdin);
-	    while((c = getchar()) != '\n')
-	    {
-		    ;
-	    }
+		/* rules check */
+		puts("Do you know the rules? (y/n)");
+		while(rules != 'y' && rules != 'n')
+		{
+			fgets(&rules, sizeof(rules) + 1, stdin); /* Added 1 to sizeof to account for fgets subtracting 1 for use with arrays that inc null terminating char */
+			while((c = getchar()) != '\n')
+			{
+				;
+			}
+			
+			if(rules != 'y' && rules != 'n')
+			{
+				puts("Please input 'y' for yes or 'n' for no");
+			}
+		}
+
+		while(rules != 'y')
+		{
+            		puts("The rules of Clefairy Says are simple. Over a 10 second interval a number of letters will appear on the screen separated by spaces. Once the pattern is finished, the screen will be wiped and the player will have to input the pattern from memory (don't include spaces). If correct, they gain points equal to the number of correct characters then move up a level. Each successive level will increase in difficulty by repeating the pattern with an increasing number of characters.");
+			puts("Press any key to begin");
+			fgets(&rules, sizeof(rules) + 1, stdin);
+			rules = 'y';
+		}
 
 	    /* resetting for a new game */
 	    /* set the seed time out here and run it in the loop so we don't need to store the randomnly generated characters, we can just regenerate them from same seed */
@@ -72,67 +86,58 @@ int main(int argc, char *argv[])
 	    /* this is the core game loop - this will repeat until the player loses the game */
 	    while(flag)
 	    {
-		    score += level - 1;
-		    char_count = 2 * level + 2;
+		    /* increment level */
+		    level++;
+		    
+		    /* updating character counter */
+		    char_count = 2 * level + 4;
+		    /* reusing the seed */
 		    seed(seed_time);
+		    /* 10 second delay spread across the total character count. This should make it more difficult as count increases */
 		    sleep_delay = 10000000 / char_count;
+
 		    printf("***LEVEL %i***\n", level);
+	
+		    /* delay before level starts */
 		    usleep(1000000);
 
 		    for(int i = 0; i < (char_count); i++)
-		    {	
-			    letters[i] = rnd_char();
+		    {
+			    letters[i] = rnd_char();	    
 			    printf("%c ", letters[i]);
 			    fflush(stdout);
 			    usleep(sleep_delay);
 		    }
 
-		    /* need to fix this - sleep is not  occurring in intervals but been stored up which is not intended */
-
-		    /* increase the number of spaces printed when the sleeps are working correctly */
-		    for(int i = 0; i < 10; i++)
+		    for(int i = 0; i < 100; i++)
 		    {
 			    puts("\n");
 		    }
 
 		    puts("Please input the pattern: ");
-		    fgets(guess, sizeof(char_count)+1, stdin); /* why do I need to have a +1 here? Something else not functioning correctly? */
+		    fgets(guess, char_count + 1, stdin);
 		    while((c = getchar()) != '\n')
 		    {
 			    ;
 		    }
 
-
 		    for(int i = 0; i < char_count; i++)
 		    {
 			if(letters[i] == guess[i])
 			{
-				printf("Your guess was %c, the correct guess was %c\n",guess[i], letters[i]); /* test print */
+				score++;
 				continue;
 			}
 			else
 			{
-				printf("your guess was %c, the correct guess was %c\n", guess[i], letters[i]); /* test print */
+				printf("Incorrect guess. You guessed: %c, the correct guess was %c\n", guess[i], letters[i]);
 				flag = 0;
-
 			}
 		    }
-
-		    level++;
 	    }
-
-	    printf("Congratulations you got to level %i and achieved a score of %i\n", level, score);
-
-	    /* this is just to pause before the game starts */
-
-            // char pattern[100];
-            // int level = 1;
-
-            // How many charactesr in teh starting pattern
-            // how to randomly select characters from the alphabet
-            // how to keep iterating through
-
-            // print out characters space
+	    printf("You got to level %i, with a score of %i\n", level, score);
+	    rules = 'x'; /* reset rules */
+	    puts("\n\n");
         }
 
     }
