@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
 	    /* set the seed time out here and run it in the loop so we don't need to store the randomnly generated characters, we can just regenerate them from same seed */
 	    seed_time = time(NULL);
 	    flag = 1;
+	    score = 0;
 
 	    /* this is the core game loop - this will repeat until the player loses the game */
 	    while(flag)
